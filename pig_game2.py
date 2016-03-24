@@ -81,12 +81,12 @@ class ComputerPlayer(Player):
         self.name = None
         Player.__init__(self)
 
-        hold1 = 25
-        hold2 = 100 - self.currentScore
-        if hold1 < hold2:
-            hold_score = hold1
+        hold25 = 25
+        hold100 = 100 - self.currentScore
+        if hold25 < hold100:
+            hold_score = hold25
         else:
-            hold_score = hold2
+            hold_score = hold100
 
         if self.turnScore < hold_score:
             self.input = 'r'
