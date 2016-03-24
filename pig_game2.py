@@ -41,7 +41,17 @@ class Player:
 
     def __init__(self):
         self.playerName = None
+        self.turnScore = 0
         self.currentScore = 0
+        self.input = None
+
+    def addTurnScore(self, dieValue):
+        """Adds score for round to player' total score"""
+        self.turnScore += dieValue
+
+    def resetTurnScore(self):
+        """Resets round score after each turn"""
+        self.turnScore = 0
 
 
     def addScore(self, points):
@@ -54,7 +64,12 @@ class Player:
 
     def stats(self):
         """Returns player's name and current score"""
-        return "{} has a current core of {} \n\n".format(self.playerName, self.currentScore)
+        return "{} has a current core of {} \n\n".format(self.name, self.currentScore)
+
+    def rollOrHold(self):
+        """Returns option to either hold score or re-roll"""
+        self.input = raw_input('Would you like hold your score or re-roll? Type "h" '
+                                'to hold or "r" to re-roll.')
 
 class HumanPlayer(Player):
     def __init__(self):
@@ -66,9 +81,23 @@ class ComputerPlayer(Player):
         self.name = None
         Player.__init__(self)
 
+        hold1 = 25
+        hold2 = 100 - self.currentScore
+        if hold1 < hold2:
+            hold_score = hold1
+        else:
+            hold_score = hold2
+
+        if self.turnScore < hold_score:
+            self.input = 'r'
+        elif self.turnScore >= hold_score:
+            self.input = 'h'
+
+
+
+
+
 class PlayerFactory(Player):
-
-
 
     def getPlayers(self, player):
         if player == 'human':
@@ -85,19 +114,9 @@ class GameState:
         self.p2 = player2
         self.p1.name = 'Player 1'
         self.p2.name = 'Player 2'
-        self.scoreKeeper = TurnScoreKeeper()
-        self.totalScore = 0
 
 
-    def rollOrHold(self):
-        """Returns option to either hold score or re-roll"""
-        self.input = raw_input('Would you like hold your score or re-roll? Type "h" '
-                               'to hold or "r" to re-roll.')
-        if self.input == 'h':
 
-            pass
-        elif self.input == 'r':
-            pass
 
     def gamePlay(self):
         """Gameplay"""
@@ -114,17 +133,17 @@ class GameState:
 
                     if diceValue == 1:
                         print "You have rolled a 1. You score no points this round. Next Player's turn. \n"
-                        self.scoreKeeper.resetScore()
+                        player.resetTurnScore()
                         break
 
-                    self.scoreKeeper.addTurnScore(diceValue)
+                    player.addTurnScore(diceValue)
 
-                    print "You rolled a {}. Your total round score is {}".format(diceValue, self.scoreKeeper.value)
-                    self.rollOrHold()
-                    if self.input == 'h':
-                        player.addScore(self.scoreKeeper.value)
+                    print "You rolled a {}. Your total round score is {}".format(diceValue, player.turnScore)
+                    player.rollOrHold()
+                    if player.input == 'h':
+                        player.addScore(player.turnScore)
                         print player.stats()
-                        self.scoreKeeper.resetScore()
+                        player.resetTurnScore()
                         break
 
                 if player.currentScore >= 100:
