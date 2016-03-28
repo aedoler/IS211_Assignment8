@@ -8,7 +8,7 @@ import time
 
 player1type = raw_input("Is Player 1 a 'human' or a 'computer'? ").lower()
 player2type = raw_input("Is Player 2 a 'human' or a 'computer'? ").lower()
-timedGameInput = raw_input("Timed game? 'Yes' or 'no' ").lower()
+timedGameInput = raw_input("Timed game? 'Yes' or 'No' ").lower()
 
 
 
@@ -168,19 +168,19 @@ class Game:
 
 class TimedGameProxy(Game):
     def __init__(self, player1, player2):
-        self.time = time.time()
         self.player1 = player1
         self.player2 = player2
-        self.timedGame = Game.__init__(self, self.player1, self.player2)
+        self.timedGame = Game(self.player1, self.player2)
 
     def timedGameMethod(self):
-        self.time = self.time
-        self.timedGame.gamePlay()
+        start_time = time.time()
         currentTime = time.time()
-        if currentTime - time >= 10:
+        while currentTime - start_time <= 5:
+            
+            self.timedGame.gamePlay()
+        else:
             print "Time Up!"
             sys.exit()
-
 
 
 
