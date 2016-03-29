@@ -5,6 +5,7 @@
 import random
 import sys
 import time
+import signal
 
 player1type = raw_input("Is Player 1 a 'human' or a 'computer'? ").lower()
 player2type = raw_input("Is Player 2 a 'human' or a 'computer'? ").lower()
@@ -171,12 +172,11 @@ class TimedGameProxy(Game):
         self.player1 = player1
         self.player2 = player2
         self.timedGame = Game(self.player1, self.player2)
+        self.timedDice = Dice() # trying a different strategy
 
     def timedGameMethod(self):
         start_time = time.time()
-        currentTime = time.time()
-        while currentTime - start_time <= 5:
-            
+        while time.time() - start_time <= 5:
             self.timedGame.gamePlay()
         else:
             print "Time Up!"
