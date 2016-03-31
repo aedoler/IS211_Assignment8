@@ -121,8 +121,11 @@ class Game:
         print self.p2
         self.p1.name = 'Player 1'
         self.p2.name = 'Player 2'
+        self.startTime = time.time()
 
+    def hookTimedGame(self):
 
+        print "in game class" # testing
 
 
     def gamePlay(self):
@@ -130,6 +133,17 @@ class Game:
         while self.p1.currentScore < 100 and self.p2.currentScore < 100:
             for player in (self.p1, self.p2):
 
+                if timedGameInput == 'yes':  # Check to see if time has passed the limit
+                    currentTime = time.time()
+                    if currentTime - self.startTime > 10:
+                        print "Time up!"
+                        if self.p1.currentScore > self.p2.currentScore:
+                            print "Player 1 is the winner!"
+                        elif self.p2.currentScore > self.p1.currentScore:
+                            print "Player 2 is the winner!"
+                        else:
+                            print "It' a tie!"
+                        sys.exit()
 
                 print "It's {}'s turn.".format(player.name)
                 print 'Rolling die............. \n'
@@ -167,20 +181,19 @@ class Game:
                         sys.exit()
 
 
+
 class TimedGameProxy(Game):
     def __init__(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
         self.timedGame = Game(self.player1, self.player2)
-        self.timedDice = Dice() # trying a different strategy
+
 
     def timedGameMethod(self):
-        start_time = time.time()
-        while time.time() - start_time <= 5:
-            self.timedGame.gamePlay()
-        else:
-            print "Time Up!"
-            sys.exit()
+        self.timedGame.gamePlay()
+
+
+
 
 
 
