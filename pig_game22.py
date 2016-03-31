@@ -117,8 +117,6 @@ class Game:
     def __init__(self, player1, player2):
         self.p1 = player1
         self.p2 = player2
-        print self.p1  # check what kind of player is being created
-        print self.p2
         self.p1.name = 'Player 1'
         self.p2.name = 'Player 2'
         self.startTime = time.time()
@@ -135,7 +133,7 @@ class Game:
 
                 if timedGameInput == 'yes':  # Check to see if time has passed the limit
                     currentTime = time.time()
-                    if currentTime - self.startTime > 10:
+                    if currentTime - self.startTime > 60:
                         print "Time up!"
                         if self.p1.currentScore > self.p2.currentScore:
                             print "Player 1 is the winner!"
